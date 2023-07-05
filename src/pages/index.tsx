@@ -10,7 +10,6 @@ const START_NODE = "A"
 const END_NODE = "G";
 
 export default function Home() {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const { data: nodesData } = api.graph.getAllNodes.useQuery();
   const { data: linksData } = api.graph.getAllLinks.useQuery();
   const { data: pathData } = api.graph.getPath.useQuery({
@@ -36,7 +35,6 @@ export default function Home() {
             <p>Path: {pathData?.path}</p>
           </div>
           <div className="flex-col bg-white">
-            {/* {nodesData && linksData && pathData} */}
             <ForceGraph
               height={900}
               width={1200}
@@ -59,11 +57,6 @@ export default function Home() {
                 ctx.textBaseline = "middle";
                 ctx.fillStyle = onPath ? "Red" : "black"; //node.color;
                 ctx.fillText(label, node.x, node.y);
-                // if (node.isClusterNode) {
-                //   ctx.fillText(label, node.x, node.y);
-                // } else {
-                //   ctx.fillText(label, node.x, node.y);
-                // }
               }}
               linkCanvasObject={(link, ctx, globalScale) => {
                 const label = link.value.toString();
@@ -71,7 +64,7 @@ export default function Home() {
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillStyle = "black"; //node.color;
+                ctx.fillStyle = "black";
 
                 const cx = (link.source.x + link.target.x) / 2;
                 const cy = (link.source.y + link.target.y) / 2;

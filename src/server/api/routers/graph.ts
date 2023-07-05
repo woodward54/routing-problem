@@ -47,13 +47,13 @@ export const graphRouter = createTRPCRouter({
 
       let unVisitedNodes = nodes.map((n) => n.id);
 
-      // All other nodes are infinity distance bc we haven't seen them yet
+      // All nodes start with infinity distance bc we haven't seen them yet
       const distanceTable = new Map(nodes.map((n) => [n.id, Number.MAX_VALUE]));
 
       // Set the starting node to 0 distance
       distanceTable.set(startNode.id, 0);
 
-      // Keep track of paths
+      // Keep track of previous nodes as we search
       const prevNodeTable = new Map(nodes.map((n) => [n.id, ""]));
 
       while (unVisitedNodes.length > 0) {
@@ -70,7 +70,7 @@ export const graphRouter = createTRPCRouter({
         if (!currentNode)
           throw new Error("Couldn't find next node (currentNode)");
 
-        // Find all links
+        // Find all links connected to currentNode
         let linksToCheck = openLinks.filter(
           (l) => l.sourceId === currentNode[0] || l.targetId == currentNode[0]
         );
@@ -84,9 +84,9 @@ export const graphRouter = createTRPCRouter({
             )
         );
 
-        // calculate and update found distances
+        // Calculate and update found distances
         for (const l of linksToCheck) {
-          // We dont know if the sourceId or targetId is the currentNode
+          // We don't know if the sourceId or targetId is the currentNode
           const nextNode = (l.sourceId + l.targetId).replace(
             currentNode[0],
             ""
