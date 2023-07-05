@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Node {
+    id      String @id @unique
+    group   Int    @default(1)
+    sources Link[] @relation("sources")
+    targets Link[] @relation("targets")
+}
+
+model Link {
+    id       String  @id @unique
+    source   Node    @relation("sources", fields: [sourceId], references: [id])
+    sourceId String
+    target   Node    @relation("targets", fields: [targetId], references: [id])
+    targetId String
+    value    Int
+    traffic  Int     @default(0)
+    isClosed Boolean @default(false)
+
+    @@index([sourceId, targetId])
+}
